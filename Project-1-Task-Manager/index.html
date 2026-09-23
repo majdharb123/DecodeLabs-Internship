@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager | DecodeLabs Full Stack Project 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <header class="app-header">
+    <div class="container">
+      <h1>📝 Task Manager</h1>
+      <p class="tagline">Stay on top of your day, one task at a time.</p>
+    </div>
+  </header>
+ 
+  <main class="container">
+ 
+    <section class="add-task-section" aria-labelledby="add-task-heading">
+      <h2 id="add-task-heading" class="visually-hidden">Add a new task</h2>
+ 
+      <form id="task-form" class="task-form" novalidate>
+        <div class="form-field">
+          <label for="task-input">New task</label>
+          <input
+            type="text"
+            id="task-input"
+            name="task-input"
+            placeholder="e.g. Finish project brief"
+            autocomplete="off"
+            maxlength="120"
+          >
+        </div>
+        <button type="submit" class="btn btn-primary" id="add-task-btn">
+          Add Task
+        </button>
+      </form>
+ 
+      <p id="form-error" class="form-error" role="alert" hidden>
+        Please enter a task before adding it.
+      </p>
+    </section>
+ 
+    <section class="tasks-section" aria-labelledby="tasks-heading">
+      <div class="tasks-header">
+        <h2 id="tasks-heading">Your Tasks</h2>
+        <span id="tasks-count" class="tasks-count">0 tasks</span>
+      </div>
+ 
+      <ul id="task-list" class="task-list">
+        <!-- Task items are inserted here by script.js -->
+      </ul>
+ 
+      <div id="empty-state" class="empty-state">
+        <p class="empty-state-icon" aria-hidden="true">🗂️</p>
+        <p class="empty-state-title">No tasks yet</p>
+        <p class="empty-state-text">Add your first task above to get started.</p>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <footer class="app-footer">
+    <div class="container">
+      <p>DecodeLabs Full Stack Project 1 &mdash; Task Manager (Frontend Phase)</p>
+    </div>
+  </footer>
+ 
+  <script src="script.js"></script>
+</body>
+</html>
