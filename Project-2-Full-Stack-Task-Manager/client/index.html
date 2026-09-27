@@ -1,72 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager | DecodeLabs Full Stack Project 1</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Full-Stack Task Manager</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
+
 <body>
+    <header class="hero">
+        <div class="hero-content">
+            <div>
+                <p class="eyebrow">DecodeLabs Internship</p>
+                <h1>Task Manager</h1>
+                <p class="hero-description">
+                    Organize your work, track deadlines, and complete tasks efficiently.
+                </p>
+            </div>
 
-  <header class="app-header">
-    <div class="container">
-      <h1>📝 Task Manager</h1>
-      <p class="tagline">Stay on top of your day, one task at a time.</p>
-    </div>
-  </header>
-
-  <main class="container">
-
-    <section class="add-task-section" aria-labelledby="add-task-heading">
-      <h2 id="add-task-heading" class="visually-hidden">Add a new task</h2>
-
-      <form id="task-form" class="task-form" novalidate>
-        <div class="form-field">
-          <label for="task-input">New task</label>
-          <input
-            type="text"
-            id="task-input"
-            name="task-input"
-            placeholder="e.g. Finish project brief"
-            autocomplete="off"
-            maxlength="120"
-          >
+            <div id="api-status" class="api-status">
+                <span class="status-dot"></span>
+                <span id="api-status-text">Checking API...</span>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="add-task-btn">
-          Add Task
-        </button>
-      </form>
+    </header>
 
-      <p id="form-error" class="form-error" role="alert" hidden>
-        Please enter a task before adding it.
-      </p>
-    </section>
+    <main class="container">
+        <section class="statistics" aria-label="Task statistics">
+            <article class="stat-card">
+                <span class="stat-label">Total Tasks</span>
+                <strong id="total-tasks">0</strong>
+            </article>
 
-    <section class="tasks-section" aria-labelledby="tasks-heading">
-      <div class="tasks-header">
-        <h2 id="tasks-heading">Your Tasks</h2>
-        <span id="tasks-count" class="tasks-count">0 tasks</span>
-      </div>
+            <article class="stat-card">
+                <span class="stat-label">In Progress</span>
+                <strong id="pending-tasks">0</strong>
+            </article>
 
-      <ul id="task-list" class="task-list">
-        <!-- Task items are inserted here by script.js -->
-      </ul>
+            <article class="stat-card">
+                <span class="stat-label">Completed</span>
+                <strong id="completed-tasks">0</strong>
+            </article>
 
-      <div id="empty-state" class="empty-state">
-        <p class="empty-state-icon" aria-hidden="true">🗂️</p>
-        <p class="empty-state-title">No tasks yet</p>
-        <p class="empty-state-text">Add your first task above to get started.</p>
-      </div>
-    </section>
+            <article class="stat-card">
+                <span class="stat-label">High Priority</span>
+                <strong id="high-priority-tasks">0</strong>
+            </article>
+        </section>
 
-  </main>
+        <section class="dashboard">
+            <article class="panel form-panel">
+                <div class="section-heading">
+                    <p class="section-label">Task details</p>
+                    <h2 id="form-title">Create a task</h2>
+                </div>
 
-  <footer class="app-footer">
-    <div class="container">
-      <p>DecodeLabs Full Stack Project 1 &mdash; Task Manager (Frontend Phase)</p>
-    </div>
-  </footer>
+                <form id="task-form">
+                    <input type="hidden" id="task-id">
 
-  <script src="script.js"></script>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            maxlength="120"
+                            placeholder="Enter a task title"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="5"
+                            maxlength="500"
+                            placeholder="Add more information about the task"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select id="priority" name="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="due-date">Due date</label>
+                            <input
+                                type="date"
+                                id="due-date"
+                                name="due_date"
+                            >
+                        </div>
+                    </div>
+
+                    <p id="form-message" class="form-message" aria-live="polite"></p>
+
+                    <div class="form-actions">
+                        <button id="submit-button" class="primary-button" type="submit">
+                            Add Task
+                        </button>
+
+                        <button
+                            id="cancel-edit-button"
+                            class="secondary-button hidden"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="panel tasks-panel">
+                <div class="tasks-header">
+                    <div class="section-heading">
+                        <p class="section-label">Workspace</p>
+                        <h2>Your tasks</h2>
+                    </div>
+
+                    <span id="visible-task-count" class="task-count">0 tasks</span>
+                </div>
+
+                <div class="task-controls">
+                    <div class="search-wrapper">
+                        <label class="sr-only" for="search-input">Search tasks</label>
+                        <input
+                            type="search"
+                            id="search-input"
+                            placeholder="Search tasks..."
+                        >
+                    </div>
+
+                    <label class="sr-only" for="priority-filter">
+                        Filter by priority
+                    </label>
+                    <select id="priority-filter">
+                        <option value="all">All priorities</option>
+                        <option value="high">High priority</option>
+                        <option value="medium">Medium priority</option>
+                        <option value="low">Low priority</option>
+                    </select>
+
+                    <label class="sr-only" for="status-filter">
+                        Filter by status
+                    </label>
+                    <select id="status-filter">
+                        <option value="all">All statuses</option>
+                        <option value="pending">In progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <p id="task-message" class="task-message" aria-live="polite">
+                    Loading tasks...
+                </p>
+
+                <ul id="task-list" class="task-list"></ul>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            DecodeLabs Full-Stack Project 2
+            <span>•</span>
+            Node.js
+            <span>•</span>
+            Express
+            <span>•</span>
+            PostgreSQL
+        </p>
+    </footer>
 </body>
 </html>
