@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/tasks";
+const API_URL = "https://decodelabs-task-manager-api.onrender.com/api/tasks";
 
 let tasks = [];
 let editingTaskId = null;
