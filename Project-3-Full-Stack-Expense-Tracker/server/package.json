@@ -1,0 +1,28 @@
+{
+  "name": "expenseflow-api",
+  "version": "1.0.0",
+  "description": "REST API for the ExpenseFlow full-stack expense tracker",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "expense-tracker",
+    "express",
+    "postgresql",
+    "rest-api"
+  ],
+  "author": "Majd Harb",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
