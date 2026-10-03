@@ -44,13 +44,15 @@ export async function getTransactions(request, response, next) {
     const values = [];
 
     if (month) {
-      values.push(`${month}-0 1`);
+      values.push(`${month}-01`);
+
+      const monthParameter = `$${values.length}`;
+
       conditions.push(`
-                t.transaction_date >= $${values.length}::date
-                AND t,transaction_date < (
-                    $${values.length}::date + INTERVAL '1 month'
-                )
-            `);
+        t.transaction_date >= ${monthParameter}::date
+        AND t.transaction_date <
+            ${monthParameter}::date + INTERVAL '1 month'
+    `);
     }
 
     if (type) {
@@ -74,11 +76,15 @@ export async function getTransactions(request, response, next) {
 
     if (search) {
       values.push(`%${search}%`);
-      conditions.push(`(
-                    t.title ILIKE $${values.length}
-                    OR COALESCE(t.notes, ") ILIKE $${values.length}
-                )
-            `);
+
+      const searchParameter = `$${values.length}`;
+
+      conditions.push(`
+        (
+            t.title ILIKE ${searchParameter}
+            OR t.notes ILIKE ${searchParameter}
+        )
+    `);
     }
 
     const whereClause =

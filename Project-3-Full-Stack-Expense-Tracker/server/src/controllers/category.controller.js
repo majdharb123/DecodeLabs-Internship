@@ -220,7 +220,7 @@ export async function deleteCategory(request, response, next) {
             data: result.rows[0],
         });
     } catch (error) {
-        if (error.code === "23503") {
+        if (["23001", "23503"].includes(error.code)) {
             return response.status(409).json({
                 status: "error",
                 message: "Category cannot be deleted because it is used by transactions",
